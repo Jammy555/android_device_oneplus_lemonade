@@ -11,6 +11,7 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 # Alert slider
 PRODUCT_PACKAGES += \
     KeyHandler \
+    TouchGestures \
     tri-state-key-calibrate
 
 # Audio
