@@ -11,7 +11,7 @@ from extract_utils.fixups_blob import (
     blob_fixups_user_type,
 )
 from extract_utils.fixups_lib import (
-    lib_fixups,
+    lib_fixups as xs_lib_fixups,
 )
 from extract_utils.main import (
     ExtractUtils,
@@ -28,6 +28,7 @@ namespace_imports = [
     'hardware/oplus',
     'vendor/oneplus/sm8350-common',
     'vendor/qcom/opensource/display',
+    'vendor/oplus/camera',
 ]
 
 
@@ -85,7 +86,7 @@ blob_fixups: blob_fixups_user_type = {
         .clear_symbol_version('rpcmem_alloc')
         .clear_symbol_version('rpcmem_free')
         .clear_symbol_version('rpcmem_to_fd'),
-    'odm/lib64/libAlgoProcess.so': blob_fixup()
+    ('odm/lib/libAlgoProcess.so', 'odm/lib64/libAlgoProcess.so'): blob_fixup()
         .replace_needed('android.hardware.graphics.common-V1-ndk_platform.so', 'android.hardware.graphics.common-V7-ndk.so'),
     'odm/lib64/libOGLManager.so': blob_fixup()
         .clear_symbol_version('AHardwareBuffer_allocate')
@@ -101,6 +102,14 @@ blob_fixups: blob_fixups_user_type = {
     'vendor/lib64/vendor.qti.hardware.camera.postproc@1.0-service-impl.so': blob_fixup()
         .call(blob_fixup_nop_call, 'bl', '__cfi_check', '_ZN7android8hardware22configureRpcThreadpoolEmb@plt'),
 }  # fmt: skip
+
+def lib_fixup_graphics_common(lib: str, partition: str) -> str:
+    return 'android.hardware.graphics.common-V7-ndk'
+
+lib_fixups = {
+    'android.hardware.graphics.common-V1-ndk_platform': lib_fixup_graphics_common,
+}
+lib_fixups.update(xs_lib_fixups)
 
 module = ExtractUtilsModule(
     'lemonade',
