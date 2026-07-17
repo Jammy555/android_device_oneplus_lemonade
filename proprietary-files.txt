@@ -1130,3 +1130,8 @@ odm/lib/libapsjpeg.so
 odm/lib/libexif-jpeg-aps.so
 odm/lib/libmpbase.so
 odm/lib/libosenseaidlhalclient.so
+
+# Camera stock helper libraries
+odm/lib64/libsharebuffer_impl.so
+system/lib64/libutils.so:vendor/lib64/libutils-stock.so;FIX_SONAME
+system/lib64/libui.so:vendor/lib64/libui-stock.so;FIX_SONAME
